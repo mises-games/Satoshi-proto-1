@@ -3,6 +3,7 @@
 
 #include "Application.h"
 #include "Log.h"
+#include "FileHandler.h"
 
 #include <codecvt>
 #include <iostream>
@@ -18,34 +19,24 @@ extern Satoshi::Application* Satoshi::CreateApplication();
 int main(int argc, char** argv) 
 {
 	Satoshi::Log::Init();
-
 	
-	ST_CORE_INFO(u8"Teste japonês: おめでとう, vamos por mais valores");
-	ST_CORE_INFO(u8"君はポルトガル語を話しますか。");
+	std::string val;
+	std::u16string val2;
+	std::u32string val3;
 
-	json j2 = 
-	{
-	  {"pi", 3.141},
-	  {"happy", true},
-	  {"name", "Niels"},
-	  {"nothing", nullptr},
-	  {"answer", {
-		{"everything", 42}
-	  }},
-	  {"list", {1, 0, 2}},
-	  {"object", {
-		{"currency", "USD"},
-		{"value", 42.99}
-	  }}
-	};
+	auto a = Satoshi::FileHandler::ReadFile<std::string>("files/reader.txt", &val);
+	auto b = Satoshi::FileHandler::ReadFile<std::u16string>("files/reader2.txt", &val2);
+	auto c = Satoshi::FileHandler::ReadFile<std::u32string>("files/reader3.txt", &val3);
 
-	double a = 3.141;
-	ST_ERR(u8"Hello Var={0}", "string");
-	ST_WARN(u8"Nova string");
+	auto a_out = Satoshi::FileHandler::WriteFile<std::string>("files/writer.txt", val);
+	auto b_out = Satoshi::FileHandler::WriteFile<std::u16string>("files/writer2.txt", val2);
+	auto c_out = Satoshi::FileHandler::WriteFile<std::u32string>("files/writer3.txt", val3);
 
 	auto app = Satoshi::CreateApplication();
 	app->Run();
 	delete app;
+
+	Satoshi::Log::End();
 
 	return 0;
 }
