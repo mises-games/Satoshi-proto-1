@@ -27,7 +27,8 @@ project "Satoshi"
 
     includedirs
     {
-        "%{prj.name}/vendor/spdlog/include"
+        "%{prj.name}/vendor/spdlog/include",
+        "Satoshi/vendor/json/single_include"
     }
 
     filter "system:windows"
@@ -76,6 +77,7 @@ project "Sandbox"
     includedirs
     {
         "Satoshi/vendor/spdlog/include",
+        "Satoshi/vendor/json/single_include",
         "Satoshi/src"
     }
 

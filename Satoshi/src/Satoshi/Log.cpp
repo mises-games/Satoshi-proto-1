@@ -8,10 +8,11 @@ namespace Satoshi
 
 	void Log::Init()
 	{
-		spdlog::set_pattern("%^[%T] %n: %v%$");
+		spdlog::set_pattern("%^[%T] [%l] %n: %v%$");
+		
 
-		s_CoreLogger = spdlog::rotating_logger_mt("SATOSHI","logs/core.txt", UINT32_MAX, 1);
+		s_CoreLogger = spdlog::basic_logger_mt("CORE", "logs/core.txt");
 				
-		s_ClientLogger = spdlog::rotating_logger_mt("APP","logs/client.txt", UINT32_MAX, 1);
+		s_ClientLogger = spdlog::basic_logger_mt("APP","logs/client.txt");
 	}
 }
