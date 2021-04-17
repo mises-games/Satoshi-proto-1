@@ -14,29 +14,29 @@
 
 
 namespace Satoshi {
-	class FileHandler
+	class SATOSHI_API FileHandler
 	{
 	public:
 		
 		template <typename T>
-		static size_t ReadFile(std::string filepath, T* storage);
+		inline static size_t ReadFile(std::string filepath, T* storage);
 		template <>
-		static size_t ReadFile<std::string>(std::string filepath, std::string* storage);
+		inline static size_t ReadFile<std::string>(std::string filepath, std::string* storage);
 		template <>
-		static size_t ReadFile<std::u16string>(std::string filepath, std::u16string* storage);
+		inline static size_t ReadFile<std::u16string>(std::string filepath, std::u16string* storage);
 		template <>
-		static size_t ReadFile<std::u32string>(std::string filepath, std::u32string* storage);
+		inline static size_t ReadFile<std::u32string>(std::string filepath, std::u32string* storage);
 		
 		template <typename T>
-		static size_t WriteFile(std::string filepath, T content);
+		inline static size_t WriteFile(std::string filepath, T content);
 		template <>
-		static size_t WriteFile<std::string>(std::string filepath, std::string content);
+		inline static size_t WriteFile<std::string>(std::string filepath, std::string content);
 		template <>
-		static size_t WriteFile<std::u16string>(std::string filepath, std::u16string content);
+		inline static size_t WriteFile<std::u16string>(std::string filepath, std::u16string content);
 		template <>
-		static size_t WriteFile<std::u32string>(std::string filepath, std::u32string content);
+		inline static size_t WriteFile<std::u32string>(std::string filepath, std::u32string content);
 		
-		inline static std::queue<std::string> ExtractPathFromFile(std::string filepath, std::string filterPattern, std::string filterDirectoryPattern);
+		inline static std::queue<std::string> ExtractPathFromFile(std::string filepath, std::string filterPattern = "((?:[^/]*/)*)");
 		inline static void CreateFilepath(std::string filepath);
 	};
 }
@@ -172,8 +172,7 @@ inline size_t Satoshi::FileHandler::WriteFile<std::u32string>(std::string filepa
 	return content.size();
 }
 
-//TODO - definir expressão regex
-inline std::queue<std::string> Satoshi::FileHandler::ExtractPathFromFile(std::string filepath, std::string filterFilepathPattern = "((?:[^/]*/)*)", std::string filterDirectoryPattern = R"(((?:[^/.]*)*))")
+inline std::queue<std::string> Satoshi::FileHandler::ExtractPathFromFile(std::string filepath, std::string filterFilepathPattern)
 {
 	std::regex filterFilepath(filterFilepathPattern);
 	std::smatch cleanedFilepath;
