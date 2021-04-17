@@ -21,8 +21,8 @@ int main(int argc, char** argv)
 
 	auto a = Satoshi::Log::GetCoreLogger();
 
-	//Satoshi::FileHandler::ExtractPathFromFile("./folder/subfolder/text.txt");
-	//std::string result = Satoshi::StringHandler::Concatenate<std::string>("5","3");
+	Satoshi::FileHandler::ExtractPathFromFile("./folder/subfolder/text.txt");
+	std::string result = Satoshi::StringHandler::Concatenate<std::string>("5","3");
 
 	auto app = Satoshi::CreateApplication();
 	app->Run();
