@@ -2,30 +2,42 @@
 #define FILE_HANDLER_H
 
 #include <fstream>
-#include <sstream>
-#include <locale>
-#include <codecvt>
+#include <iostream>
+#include <string>
+#include <regex>
+#include <queue>
+#include "StringHandler.h"
+
+#ifdef ST_PLATFORM_WINDOWS
+	#include <windows.h>
+#endif
+
 
 namespace Satoshi {
 	class FileHandler
 	{
 	public:
+		
 		template <typename T>
-		static size_t ReadFile(std::string filepath, T* storage);
+		inline static size_t ReadFile(std::string filepath, T* storage);
 		template <>
-		static size_t ReadFile<std::string>(std::string filepath, std::string* storage);
+		inline static size_t ReadFile<std::string>(std::string filepath, std::string* storage);
 		template <>
-		static size_t ReadFile<std::u16string>(std::string filepath, std::u16string* storage);
+		inline static size_t ReadFile<std::u16string>(std::string filepath, std::u16string* storage);
 		template <>
-		static size_t ReadFile<std::u32string>(std::string filepath, std::u32string* storage);
+		inline static size_t ReadFile<std::u32string>(std::string filepath, std::u32string* storage);
+		
 		template <typename T>
-		static size_t WriteFile(std::string FileName, T content);
+		inline static size_t WriteFile(std::string filepath, T content);
 		template <>
-		static size_t WriteFile<std::string>(std::string FileName, std::string content);
+		inline static size_t WriteFile<std::string>(std::string filepath, std::string content);
 		template <>
-		static size_t WriteFile<std::u16string>(std::string FileName, std::u16string content);
+		inline static size_t WriteFile<std::u16string>(std::string filepath, std::u16string content);
 		template <>
-		static size_t WriteFile<std::u32string>(std::string FileName, std::u32string content);
+		inline static size_t WriteFile<std::u32string>(std::string filepath, std::u32string content);
+		
+		inline static std::queue<std::string> ExtractPathFromFile(std::string filepath, std::string filterPattern = "((?:[^/]*/)*)");
+		inline static void CreateFilepath(std::string filepath);
 	};
 }
 
@@ -109,7 +121,7 @@ inline size_t Satoshi::FileHandler::WriteFile(std::string FileName, T content)
 template<>
 inline size_t Satoshi::FileHandler::WriteFile<std::string>(std::string filepath, std::string content)
 {
-	std::stringstream fileBuffer;
+	CreateFilepath(filepath);
 	std::ofstream fileStream;
 	try
 	{
@@ -127,6 +139,7 @@ inline size_t Satoshi::FileHandler::WriteFile<std::string>(std::string filepath,
 template<>
 inline size_t Satoshi::FileHandler::WriteFile<std::u16string>(std::string filepath, std::u16string content)
 {
+	CreateFilepath(filepath);
 	std::basic_ofstream<char16_t> fileStream;
 	try
 	{
@@ -144,6 +157,7 @@ inline size_t Satoshi::FileHandler::WriteFile<std::u16string>(std::string filepa
 template<>
 inline size_t Satoshi::FileHandler::WriteFile<std::u32string>(std::string filepath, std::u32string content)
 {
+	CreateFilepath(filepath);
 	std::basic_ofstream<char32_t> fileStream;
 	try
 	{
@@ -157,5 +171,65 @@ inline size_t Satoshi::FileHandler::WriteFile<std::u32string>(std::string filepa
 	fileStream.close();
 	return content.size();
 }
+
+inline std::queue<std::string> Satoshi::FileHandler::ExtractPathFromFile(std::string filepath, std::string filterFilepathPattern)
+{
+	std::regex filterFilepath(filterFilepathPattern);
+	std::smatch cleanedFilepath;
+	
+	std::regex_search(filepath, cleanedFilepath, filterFilepath);
+	
+	std::queue<std::string> Directories = Satoshi::StringHandler::Split<std::string>(cleanedFilepath[0],"/");
+
+	if (Directories.front() == ".")
+		Directories.pop();
+
+	return Directories;
+}
+
+#ifdef ST_PLATFORM_WINDOWS
+
+inline void Satoshi::FileHandler::CreateFilepath(std::string filepath)
+{
+	
+	std::queue<std::string> directories = ExtractPathFromFile(filepath);
+	std::wstring w_filepath;
+	size_t rootDirectoryDifference = 0;
+
+	while (directories.size() > 0) 
+	{
+		w_filepath = Satoshi::StringHandler::ConvertStringToWString(directories.front());
+		LPCWSTR convert = w_filepath.c_str();
+		CreateDirectory(convert, NULL);
+		int status = _wchdir(Satoshi::StringHandler::Concatenate<std::wstring>(L"./",w_filepath).c_str());
+		rootDirectoryDifference++;
+		directories.pop();
+	}
+	for (size_t i = 0; i < rootDirectoryDifference; i++)
+		int status = _wchdir(L"..");	
+}
+
+#elif ST_PLATFORM_MAC
+
+inline void Satoshi::FileHandler::CreateFilepath(std::string filepath)
+{
+	throw "Satoshi Doesn't Support Directory System on Mac";
+}
+
+#elif ST_PLATFORM_LINUX
+
+inline void Satoshi::FileHandler::CreateFilepath(std::string filepath)
+{
+	throw "Satoshi Doesn't Support Directory System on Mac";
+}
+
+#else
+
+inline void Satoshi::FileHandler::CreateFilepath(std::string filepath)
+{
+	throw "Satoshi Doesn't Support Directory System";
+}
+
+#endif
 
 #endif
