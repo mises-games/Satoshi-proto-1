@@ -12,7 +12,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 project "Satoshi"
     location "Satoshi"
-    kind "SharedLib"
+    kind "StaticLib"
     language "C++"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")

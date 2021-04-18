@@ -14,7 +14,7 @@
 
 
 namespace Satoshi {
-	class SATOSHI_API FileHandler
+	class FileHandler
 	{
 	public:
 		

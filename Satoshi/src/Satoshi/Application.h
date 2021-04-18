@@ -5,7 +5,7 @@
 
 namespace Satoshi 
 {
-	class SATOSHI_API Application
+	class Application
 	{
 	public:
 		Application();
