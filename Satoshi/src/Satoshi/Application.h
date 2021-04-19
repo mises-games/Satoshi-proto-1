@@ -1,6 +1,7 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
+#include <stpch.h>
 #include "Core.h"
 
 namespace Satoshi 

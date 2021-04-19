@@ -25,10 +25,14 @@ project "Satoshi"
         "%{prj.name}/src/**.cpp"
     }
 
+    pchheader "stpch.h"
+    pchsource "Satoshi/src/stpch.cpp"
+
     includedirs
     {
         "%{prj.name}/vendor/spdlog/include",
-        "Satoshi/vendor/json/single_include"
+        "%{prj.name}/vendor/json/single_include",
+        "%{prj.name}/src"
     }
 
     filter "system:windows"

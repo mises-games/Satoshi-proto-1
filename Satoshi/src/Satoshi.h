@@ -4,8 +4,8 @@
 #include "Satoshi/Application.h"
 #include "Satoshi/EntryPoint.h"
 #include "Satoshi/Log.h"
-#include "Satoshi/FileHandler.h"
-#include "Satoshi/StringHandler.h"
+#include "Satoshi/Utils/FileHandler.h"
+#include "Satoshi/Utils/StringHandler.h"
 
 #endif
 

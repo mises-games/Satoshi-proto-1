@@ -1,10 +1,8 @@
 #ifndef STRING_HANDLER_H
 #define STRING_HANDLER_H
 
-#include "Core.h"
-#include <sstream>
-#include <queue>
-#include <codecvt>
+#include <stpch.h>
+#include <Satoshi/Core.h>
 
 namespace Satoshi
 {
@@ -23,17 +21,28 @@ namespace Satoshi
 		static std::queue<std::wstring> Split(const std::wstring&, const std::wstring&);
 
 		template <typename T>
-		static T Concatenate(const T&, const T&);
+		static T Concatenate(size_t, const T& ...);
 		template <>
-		static std::string Concatenate(const std::string&, const std::string&);
+		static std::string Concatenate(size_t, const std::string& ...);
 		template <>
-		static std::u16string Concatenate(const std::u16string&, const std::u16string&);
+		static std::u16string Concatenate(size_t, const std::u16string& ...);
 		template <>
-		static std::u32string Concatenate(const std::u32string&, const std::u32string&);
+		static std::u32string Concatenate(size_t, const std::u32string& ...);
 		template <>
-		static std::wstring Concatenate(const std::wstring&, const std::wstring&);
+		static std::wstring Concatenate(size_t, const std::wstring& ...);
 
-		static std::wstring ConvertStringToWString(const std::string&);
+		template <typename T, typename S>
+		static T Parse(S);
+		template <typename S>
+		static std::string Parse(S);
+		template <typename S>
+		static std::u16string Parse(S);
+		template <typename S>
+		static std::u32string Parse(S);
+		template <typename S>
+		static std::wstring Parse(S);
+
+		inline static std::wstring ConvertStringToWString(const std::string&);
 	};
 	
 }
@@ -138,53 +147,107 @@ inline std::queue<std::wstring> Satoshi::StringHandler::Split(const std::wstring
 }
 
 template<typename T>
-inline T Satoshi::StringHandler::Concatenate(const T& firstString, const T& secondString)
+inline T Satoshi::StringHandler::Concatenate(size_t numberOfArgs, const T&... )
 {
 	static_assert(false);
-	return std::queue<T>();
+	return T();
 }
 
 template<>
-inline std::string Satoshi::StringHandler::Concatenate(const std::string& firstString, const std::string& secondString)
+inline std::string Satoshi::StringHandler::Concatenate(size_t numberOfArgs, const std::string& ...)
 {
 	std::stringstream buffer;
 
-	buffer << firstString << secondString;
+	va_list arguments;
+	va_start(arguments, numberOfArgs);
+
+	for (size_t i = 0; i < numberOfArgs; i++)
+		buffer << va_arg(arguments, std::string);
 
 	return buffer.str();
 }
 
 template<>
-inline std::u16string Satoshi::StringHandler::Concatenate(const std::u16string& firstString, const std::u16string& secondString)
+inline std::u16string Satoshi::StringHandler::Concatenate(size_t numberOfArgs, const std::u16string& ...)
 {
 	std::basic_stringstream<char16_t> buffer;
 
-	buffer << firstString << secondString;
+	va_list arguments;
+	va_start(arguments, numberOfArgs);
+	
+	for (size_t i = 0; i < numberOfArgs; i++)
+		buffer << va_arg(arguments, std::u16string);
 
 	return buffer.str();
 }
 
 template<>
-inline std::u32string Satoshi::StringHandler::Concatenate(const std::u32string& firstString, const std::u32string& secondString)
+inline std::u32string Satoshi::StringHandler::Concatenate(size_t numberOfArgs, const std::u32string& ...)
 {
 	std::basic_stringstream<char32_t> buffer;
 
-	buffer << firstString << secondString;
+	va_list arguments;
+	va_start(arguments, numberOfArgs);
+
+	for (size_t i = 0; i < numberOfArgs; i++)
+		buffer << va_arg(arguments, std::u32string);
 
 	return buffer.str();
 }
 
 template<>
-inline std::wstring Satoshi::StringHandler::Concatenate(const std::wstring& firstString, const std::wstring& secondString)
+inline std::wstring Satoshi::StringHandler::Concatenate(size_t numberOfArgs, const std::wstring& ...)
 {
 	std::wstringstream buffer;
 
-	buffer << firstString << secondString;
+	va_list arguments;
+	va_start(arguments, numberOfArgs);
+
+	for (size_t i = 0; i < numberOfArgs; i++)
+		buffer << va_arg(arguments, std::wstring);
 
 	return buffer.str();
 }
 
-std::wstring Satoshi::StringHandler::ConvertStringToWString(const std::string& stringToConvert)
+template<typename T, typename S>
+inline T Satoshi::StringHandler::Parse(S variable)
+{
+	return T();
+}
+
+template<typename S>
+inline std::string Satoshi::StringHandler::Parse(S variable)
+{
+	std::stringstream buffer;
+	buffer << variable;
+	return buffer.str();
+}
+
+template<typename S>
+inline std::u16string Satoshi::StringHandler::Parse(S variable)
+{
+	std::basic_stringstream<char16_t> buffer;
+	buffer << variable;
+	return buffer.str();
+}
+
+template<typename S>
+inline std::u32string Satoshi::StringHandler::Parse(S variable)
+{
+	std::basic_stringstream<char32_t> buffer;
+	buffer << variable;
+	return buffer.str();
+}
+
+template<typename S>
+inline std::wstring Satoshi::StringHandler::Parse(S variable)
+{
+	std::wstringstream buffer;
+	buffer << variable;
+	return buffer.str();
+}
+
+inline std::wstring Satoshi::StringHandler::ConvertStringToWString(const std::string& stringToConvert)
 {
 	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 	std::wstring result;

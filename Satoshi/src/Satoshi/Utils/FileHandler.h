@@ -1,17 +1,8 @@
 #ifndef FILE_HANDLER_H
 #define FILE_HANDLER_H
 
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <regex>
-#include <queue>
+#include <stpch.h>
 #include "StringHandler.h"
-
-#ifdef ST_PLATFORM_WINDOWS
-	#include <windows.h>
-#endif
-
 
 namespace Satoshi {
 	class FileHandler
@@ -201,7 +192,7 @@ inline void Satoshi::FileHandler::CreateFilepath(std::string filepath)
 		w_filepath = Satoshi::StringHandler::ConvertStringToWString(directories.front());
 		LPCWSTR convert = w_filepath.c_str();
 		CreateDirectory(convert, NULL);
-		int status = _wchdir(Satoshi::StringHandler::Concatenate<std::wstring>(L"./",w_filepath).c_str());
+		int status = _wchdir(Satoshi::StringHandler::Concatenate<std::wstring>(2,L"./",w_filepath).c_str());
 		rootDirectoryDifference++;
 		directories.pop();
 	}
