@@ -10,6 +10,11 @@ workspace "Satoshi"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+IncludeDir = {}
+IncludeDir["GLFW"] = "Satoshi/vendor/GLFW/include"
+
+include "Satoshi/vendor/GLFW"
+
 project "Satoshi"
     location "Satoshi"
     kind "StaticLib"
@@ -32,7 +37,14 @@ project "Satoshi"
     {
         "%{prj.name}/vendor/spdlog/include",
         "%{prj.name}/vendor/json/single_include",
+        "%{IncludeDir.GLFW}",
         "%{prj.name}/src"
+    }
+
+    links
+    {
+        "GLFW",
+        "opengl32.lib"
     }
 
     filter "system:windows"

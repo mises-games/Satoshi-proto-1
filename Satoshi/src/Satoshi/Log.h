@@ -6,7 +6,7 @@
 
 namespace Satoshi 
 {
-	class Log
+	class SATOSHI_API Log
 	{
 	public:
 		static void Init();

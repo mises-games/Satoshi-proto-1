@@ -6,7 +6,7 @@
 
 Satoshi::Application::Application() 
 {
-
+	m_Window = std::unique_ptr<Window>(Window::Create());
 }
 
 Satoshi::Application::~Application()
@@ -15,9 +15,8 @@ Satoshi::Application::~Application()
 
 void Satoshi::Application::Run()
 {
-	WindowResizeEvent e(1280, 720);
-	std::cout << "Teste Ativo" << std::endl;
-	/*if (e.IsInCategory(EventCategoryApplication) || e.IsInCategory(EventCategoryApplication))
-		ST_TRACE(e);*/
-	while (true);
+	while (m_Running) 
+	{
+		m_Window->OnUpdate();
+	}
 }

@@ -7,7 +7,7 @@
 
 namespace Satoshi
 {
-	class StringHandler
+	class SATOSHI_API StringHandler
 	{
 	public:
 		template <typename String>

@@ -4,3 +4,6 @@
 [submodule "Satoshi/vendor/json"]
 	path = Satoshi/vendor/json
 	url = https://github.com/nlohmann/json
+[submodule "Satoshi/vendor/GLFW"]
+	path = Satoshi/vendor/GLFW
+	url = https://github.com/mises-games/glfw.git

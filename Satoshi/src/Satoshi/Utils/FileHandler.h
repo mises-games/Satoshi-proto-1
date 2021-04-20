@@ -5,7 +5,7 @@
 #include "StringHandler.h"
 
 namespace Satoshi {
-	class FileHandler
+	class SATOSHI_API FileHandler
 	{
 	public:
 		

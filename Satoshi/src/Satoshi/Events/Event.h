@@ -67,7 +67,7 @@ namespace Satoshi
 		template<typename T>
 		using EventFunction = std::function<bool(T&)>;
 	public:
-		EventDispatcher(Event& event);
+		inline EventDispatcher(Event& event);
 		template<typename T>
 		bool Dispatch(EventFunction<T> function);
 	private:
@@ -81,7 +81,7 @@ inline bool Satoshi::Event::IsInCategory(EventCategory category)
 	return GetCategoryFlags() & category;
 }
 
-Satoshi::EventDispatcher::EventDispatcher(Event& event) : m_Event(event)
+inline Satoshi::EventDispatcher::EventDispatcher(Event& event) : m_Event(event)
 {
 }
 
