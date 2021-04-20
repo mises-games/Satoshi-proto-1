@@ -9,6 +9,8 @@
 #include <chrono>
 #include <unordered_map>
 #include <unordered_set>
+#include <bitset>
+#include <cassert>
 
 #include <iostream>
 #include <fstream>

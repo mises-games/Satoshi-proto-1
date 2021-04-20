@@ -9,41 +9,28 @@ namespace Satoshi {
 	{
 	public:
 		
-		template <typename T>
-		inline static size_t ReadFile(std::string filepath, T* storage);
-		template <>
-		inline static size_t ReadFile<std::string>(std::string filepath, std::string* storage);
-		template <>
-		inline static size_t ReadFile<std::u16string>(std::string filepath, std::u16string* storage);
-		template <>
-		inline static size_t ReadFile<std::u32string>(std::string filepath, std::u32string* storage);
+		template <typename String, typename StringPrimitive>
+		inline static size_t ReadFile(std::string filepath, String* storage);
 		
-		template <typename T>
-		inline static size_t WriteFile(std::string filepath, T content);
-		template <>
-		inline static size_t WriteFile<std::string>(std::string filepath, std::string content);
-		template <>
-		inline static size_t WriteFile<std::u16string>(std::string filepath, std::u16string content);
-		template <>
-		inline static size_t WriteFile<std::u32string>(std::string filepath, std::u32string content);
+		template <typename String, typename StringPrimitive>
+		inline static size_t WriteFile(const std::string& filepath, const String& content);
 		
 		inline static std::queue<std::string> ExtractPathFromFile(std::string filepath, std::string filterPattern = "((?:[^/]*/)*)");
-		inline static void CreateFilepath(std::string filepath);
+		inline static int CreateFilepath(std::string filepath);
 	};
 }
 
-template<typename T>
-inline size_t Satoshi::FileHandler::ReadFile(std::string filepath, T* storage)
+template<typename String, typename StringPrimitive>
+inline size_t Satoshi::FileHandler::ReadFile(std::string filepath, String* storage)
 {
-	static_assert(false);
-	return 0;
-}
+	static_assert
+	(
+		Satoshi::AssertionHandler::IsValidString<String>() &&
+		Satoshi::AssertionHandler::IsValidPrimitive<String, StringPrimitive>()
+	);
 
-template<>
-inline size_t Satoshi::FileHandler::ReadFile<std::string>(std::string filepath, std::string* storage)
-{
-	std::stringstream fileBuffer;
-	std::ifstream fileStream;
+	std::basic_stringstream<StringPrimitive> fileBuffer;
+	std::basic_ifstream<StringPrimitive> fileStream;
 	try
 	{
 		fileStream.open(filepath);
@@ -60,96 +47,17 @@ inline size_t Satoshi::FileHandler::ReadFile<std::string>(std::string filepath, 
 	return storage->size();
 }
 
-template<>
-inline size_t Satoshi::FileHandler::ReadFile<std::u16string>(std::string filepath, std::u16string* storage)
+template<typename String, typename StringPrimitive>
+inline size_t Satoshi::FileHandler::WriteFile(const std::string& filepath, const String& content)
 {
-	std::basic_stringstream<char16_t> fileBuffer;
-	std::basic_ifstream<char16_t> fileStream;
-	try
-	{
-		fileStream.open(filepath);
-	}
-	catch (const std::ifstream::failure& e)
-	{
-		throw e.what();
-	}
-	std::basic_string<char16_t> line;
-	while (getline(fileStream, line))
-		fileBuffer << line << '\n';
-	fileStream.close();
-	*storage = fileBuffer.str();
-	return storage->size();
-}
+	static_assert
+	(
+		Satoshi::AssertionHandler::IsValidString<String>() &&
+		Satoshi::AssertionHandler::IsValidPrimitive<String, StringPrimitive>()
+	);
 
-template<>
-inline size_t Satoshi::FileHandler::ReadFile<std::u32string>(std::string filepath, std::u32string* storage)
-{
-	std::basic_stringstream<char32_t> fileBuffer;
-	std::basic_ifstream<char32_t> fileStream;
-	try
-	{
-		fileStream.open(filepath);
-	}
-	catch (const std::ifstream::failure& e)
-	{
-		throw e.what();
-	}
-	std::basic_string<char32_t> line;
-	while (getline(fileStream, line))
-		fileBuffer << line << '\n';
-	fileStream.close();
-	*storage = fileBuffer.str();
-	return storage->size();
-}
-
-template<typename T>
-inline size_t Satoshi::FileHandler::WriteFile(std::string FileName, T content)
-{
-	static_assert(false);
-	return 0;
-}
-
-template<>
-inline size_t Satoshi::FileHandler::WriteFile<std::string>(std::string filepath, std::string content)
-{
 	CreateFilepath(filepath);
-	std::ofstream fileStream;
-	try
-	{
-		fileStream.open(filepath);
-	}
-	catch (const std::ofstream::failure& e)
-	{
-		throw e.what();
-	}
-	fileStream << content;
-	fileStream.close();
-	return content.size();
-}
-
-template<>
-inline size_t Satoshi::FileHandler::WriteFile<std::u16string>(std::string filepath, std::u16string content)
-{
-	CreateFilepath(filepath);
-	std::basic_ofstream<char16_t> fileStream;
-	try
-	{
-		fileStream.open(filepath);
-	}
-	catch (const std::ofstream::failure& e)
-	{
-		throw e.what();
-	}
-	fileStream << content;
-	fileStream.close();
-	return content.size();
-}
-
-template<>
-inline size_t Satoshi::FileHandler::WriteFile<std::u32string>(std::string filepath, std::u32string content)
-{
-	CreateFilepath(filepath);
-	std::basic_ofstream<char32_t> fileStream;
+	std::basic_ofstream<StringPrimitive> fileStream;
 	try
 	{
 		fileStream.open(filepath);
@@ -178,26 +86,25 @@ inline std::queue<std::string> Satoshi::FileHandler::ExtractPathFromFile(std::st
 	return Directories;
 }
 
-#ifdef ST_PLATFORM_WINDOWS
+#ifdef ST_PLATFORM_MSDOS
 
-inline void Satoshi::FileHandler::CreateFilepath(std::string filepath)
+inline int Satoshi::FileHandler::CreateFilepath(std::string filepath)
 {
-	
+	int status = -1;
 	std::queue<std::string> directories = ExtractPathFromFile(filepath);
-	std::wstring w_filepath;
-	size_t rootDirectoryDifference = 0;
+	size_t numberOfDirectories = directories.size();
+	std::string relativeFilepath;
 
-	while (directories.size() > 0) 
+	for (size_t i = 0; directories.size() > 0; i++)
 	{
-		w_filepath = Satoshi::StringHandler::ConvertStringToWString(directories.front());
-		LPCWSTR convert = w_filepath.c_str();
-		CreateDirectory(convert, NULL);
-		int status = _wchdir(Satoshi::StringHandler::Concatenate<std::wstring>(2,L"./",w_filepath).c_str());
-		rootDirectoryDifference++;
+		if(i != 0)
+			Satoshi::StringHandler::Concatenate<std::string, char>(relativeFilepath, "/");
+		Satoshi::StringHandler::Concatenate<std::string, char>(relativeFilepath, directories.front());
+		status = _mkdir(relativeFilepath.c_str());
 		directories.pop();
 	}
-	for (size_t i = 0; i < rootDirectoryDifference; i++)
-		int status = _wchdir(L"..");	
+
+	return status;
 }
 
 #elif ST_PLATFORM_MAC

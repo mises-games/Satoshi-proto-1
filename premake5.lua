@@ -42,7 +42,7 @@ project "Satoshi"
 
         defines
         {
-            "ST_PLATFORM_WINDOWS",
+            "ST_PLATFORM_MSDOS",
             "ST_BUILD_DLL"
         }
 
@@ -97,7 +97,7 @@ project "Sandbox"
 
         defines
         {
-            "ST_PLATFORM_WINDOWS"
+            "ST_PLATFORM_MSDOS"
         }
     
     filter "configurations:Debug"

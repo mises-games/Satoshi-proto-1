@@ -81,14 +81,13 @@ inline unsigned Satoshi::WindowResizeEvent::GetHeight() const
 
 inline std::string Satoshi::WindowResizeEvent::ToString() const
 {
-	return Satoshi::StringHandler::Concatenate<std::string>
-	(
-		4,
-		"WindowResizeEvent: ", 
-		Satoshi::StringHandler::Parse<std::string, unsigned>(m_Width), 
-		", " , 
-		Satoshi::StringHandler::Parse<std::string, unsigned>(m_Height)
-	);
+	std::string buffer = Satoshi::StringHandler::Concatenate<std::string,char>
+	("WindowResizeEvent: ",	Satoshi::StringHandler::ParseNumber<std::string, char, unsigned>(m_Width));
+	buffer = Satoshi::StringHandler::Concatenate<std::string,char>
+	(buffer,", ");
+	buffer = Satoshi::StringHandler::Concatenate<std::string,char>
+	(buffer,Satoshi::StringHandler::ParseNumber<std::string, char, unsigned>(m_Height));
+	return buffer;
 }
 
 #endif

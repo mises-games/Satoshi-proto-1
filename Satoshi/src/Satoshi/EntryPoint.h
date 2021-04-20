@@ -11,7 +11,7 @@
 
 using json = nlohmann::json;
 
-#ifdef ST_PLATFORM_WINDOWS
+#ifdef ST_PLATFORM_MSDOS
 
 extern Satoshi::Application* Satoshi::CreateApplication();
 

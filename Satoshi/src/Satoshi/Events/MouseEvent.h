@@ -95,9 +95,9 @@ std::string Satoshi::MouseMovedEvent::ToString() const
 	(
 		4,
 		"MouseMovedEvent: ", 
-		Satoshi::StringHandler::Parse<std::string, float>(m_PositionX),
+		Satoshi::StringHandler::ParseNumber<std::string, float>(m_PositionX),
 		",",
-		Satoshi::StringHandler::Parse<std::string, float>(m_PositionY)
+		Satoshi::StringHandler::ParseNumber<std::string, float>(m_PositionY)
 	);
 }
 
@@ -121,14 +121,23 @@ inline float Satoshi::MouseScrolledEvent::GetYOffset() const
 
 inline std::string Satoshi::MouseScrolledEvent::ToString() const
 {
+	/*
 	return Satoshi::StringHandler::Concatenate<std::string>
 	(
 		4,
 		"MouseScrolledEvent: ",
-		Satoshi::StringHandler::Parse<std::string, float>(m_XOffset),
+		Satoshi::StringHandler::ParseNumber<std::string, float>(m_XOffset),
 		",",
-		Satoshi::StringHandler::Parse<std::string, float>(m_YOffset)
+		Satoshi::StringHandler::ParseNumber<std::string, float>(m_YOffset)
 	);
+	*/
+	std::string buffer = Satoshi::StringHandler::Concatenate<std::string, char>
+		("MouseScrolledEvent: ", Satoshi::StringHandler::ParseNumber<std::string, float>(m_XOffset));
+	buffer = Satoshi::StringHandler::Concatenate<std::string, char>
+		(buffer, ", ");
+	buffer = Satoshi::StringHandler::Concatenate<std::string, char>
+		(buffer, Satoshi::StringHandler::ParseNumber<std::string, char, float>(m_YOffset));
+	return buffer;
 }
 
 // MouseButtonEvent
@@ -154,12 +163,9 @@ Satoshi::MouseButtonPressedEvent::MouseButtonPressedEvent(int button) :
 
 inline std::string Satoshi::MouseButtonPressedEvent::ToString() const
 {
-	return Satoshi::StringHandler::Concatenate<std::string>
-	(
-		2,
-		"MouseButtonPressedEvent: ",
-		Satoshi::StringHandler::Parse<std::string, int>(m_Button)
-	);
+	std::string buffer = Satoshi::StringHandler::Concatenate<std::string, char>
+		("MouseButtonPressedEvent: ", Satoshi::StringHandler::ParseNumber<std::string, char, int>(m_Button));
+	return buffer;
 }
 
 // MouseButtonReleasedEvent
@@ -172,12 +178,9 @@ Satoshi::MouseButtonReleasedEvent::MouseButtonReleasedEvent(int button) :
 
 inline std::string Satoshi::MouseButtonReleasedEvent::ToString() const
 {
-	return Satoshi::StringHandler::Concatenate<std::string>
-	(
-		2,
-		"MouseButtonPressedEvent: ",
-		Satoshi::StringHandler::Parse<std::string, int>(m_Button)
-	);
+	std::string buffer = Satoshi::StringHandler::Concatenate<std::string, char>
+		("MouseButtonReleasedEvent: ", Satoshi::StringHandler::ParseNumber<std::string, char, int>(m_Button));
+	return buffer;
 }
 
 #endif

@@ -81,15 +81,27 @@ inline int Satoshi::KeyPressedEvent::GetRepeatCount() const
 
 inline std::string Satoshi::KeyPressedEvent::ToString() const
 {
+	/*
 	return Satoshi::StringHandler::Concatenate<std::string>
 	(
 		5,
 		"KeyPressedEvent: ", 
-		Satoshi::StringHandler::Parse<std::string, int>(m_KeyCode), 
+		Satoshi::StringHandler::ParseNumber<std::string, int>(m_KeyCode), 
 		" (", 
-		Satoshi::StringHandler::Parse<std::string, int>(m_RepeatCount),
+		Satoshi::StringHandler::ParseNumber<std::string, int>(m_RepeatCount),
 		" repeats)"
 	);
+	*/
+
+	std::string buffer = Satoshi::StringHandler::Concatenate<std::string, char>
+		("KeyPressedEvent: ", Satoshi::StringHandler::ParseNumber<std::string, char, int>(m_KeyCode));
+	buffer = Satoshi::StringHandler::Concatenate<std::string, char>
+		(buffer, " (");
+	buffer = Satoshi::StringHandler::Concatenate<std::string, char>
+		(buffer, Satoshi::StringHandler::ParseNumber<std::string, char, int>(m_RepeatCount));
+	buffer = Satoshi::StringHandler::Concatenate<std::string, char>
+		(buffer, " repeats)");
+	return buffer;
 }
 
 // Key Typed Event Implementation
@@ -102,12 +114,9 @@ Satoshi::KeyTypedEvent::KeyTypedEvent(int keycode) :
 
 inline std::string Satoshi::KeyTypedEvent::ToString() const
 {
-	return Satoshi::StringHandler::Concatenate<std::string>
-	(
-		2,
-		"KeyTypedEvent: ",
-		Satoshi::StringHandler::Parse<std::string, int>(m_KeyCode)
-	);
+	std::string buffer = Satoshi::StringHandler::Concatenate<std::string, char>
+		("KeyTypedEvent: ", Satoshi::StringHandler::ParseNumber<std::string, char, int>(m_KeyCode));
+	return buffer;
 }
 
 // Key Released Event Implementation
@@ -120,12 +129,9 @@ Satoshi::KeyReleasedEvent::KeyReleasedEvent(int keycode) :
 
 inline std::string Satoshi::KeyReleasedEvent::ToString() const
 {
-	return Satoshi::StringHandler::Concatenate<std::string>
-	(
-		2,
-		"KeyReleasedEvent: ",
-		Satoshi::StringHandler::Parse<std::string, int>(m_KeyCode)
-	);
+	std::string buffer = Satoshi::StringHandler::Concatenate<std::string, char>
+		("KeyReleasedEvent: ", Satoshi::StringHandler::ParseNumber<std::string, char, int>(m_KeyCode));
+	return buffer;
 }
 
 #endif

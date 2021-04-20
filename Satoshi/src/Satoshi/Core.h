@@ -1,7 +1,7 @@
 #ifndef CORE_H
 #define CORE_H
 
-	#ifdef ST_PLATFORM_WINDOWS
+	#ifdef ST_PLATFORM_MSDOS
 		#ifdef ST_BUILD_DLL
 			#define SATOSHI_API _declspec(dllexport)
 		#else
