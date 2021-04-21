@@ -91,14 +91,13 @@ inline float Satoshi::MouseMovedEvent::GetY() const
 
 std::string Satoshi::MouseMovedEvent::ToString() const
 {
-	return Satoshi::StringHandler::Concatenate<std::string>
-	(
-		4,
-		"MouseMovedEvent: ", 
-		Satoshi::StringHandler::ParseNumber<std::string, float>(m_PositionX),
-		",",
-		Satoshi::StringHandler::ParseNumber<std::string, float>(m_PositionY)
-	);
+	std::string buffer = Satoshi::StringHandler::Concatenate<std::string, char>
+		("MouseMovedEvent: ", Satoshi::StringHandler::ParseNumber<std::string, char, float>(m_PositionX));
+	buffer = Satoshi::StringHandler::Concatenate<std::string, char>
+		(buffer, ",");
+	buffer = Satoshi::StringHandler::Concatenate<std::string, char>
+		(buffer, Satoshi::StringHandler::ParseNumber<std::string, char, float>(m_PositionY));
+	return buffer;
 }
 
 // Mouse Scrolled Implementations
@@ -121,18 +120,8 @@ inline float Satoshi::MouseScrolledEvent::GetYOffset() const
 
 inline std::string Satoshi::MouseScrolledEvent::ToString() const
 {
-	/*
-	return Satoshi::StringHandler::Concatenate<std::string>
-	(
-		4,
-		"MouseScrolledEvent: ",
-		Satoshi::StringHandler::ParseNumber<std::string, float>(m_XOffset),
-		",",
-		Satoshi::StringHandler::ParseNumber<std::string, float>(m_YOffset)
-	);
-	*/
 	std::string buffer = Satoshi::StringHandler::Concatenate<std::string, char>
-		("MouseScrolledEvent: ", Satoshi::StringHandler::ParseNumber<std::string, float>(m_XOffset));
+		("MouseScrolledEvent: ", Satoshi::StringHandler::ParseNumber<std::string, char, float>(m_XOffset));
 	buffer = Satoshi::StringHandler::Concatenate<std::string, char>
 		(buffer, ", ");
 	buffer = Satoshi::StringHandler::Concatenate<std::string, char>

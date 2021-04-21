@@ -39,6 +39,8 @@ namespace Satoshi
 			EventCallbackFunction EventCallback;
 		};
 		WindowData m_Data;
+
+		void SetGLCallbacks();
 	};
 }
 

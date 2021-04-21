@@ -2,7 +2,9 @@
 #define STPCH_H
 
 #include <memory>
+#include <list>
 #include <queue>
+#include <stack>
 #include <vector>
 #include <utility>
 #include <functional>
@@ -18,10 +20,7 @@
 #include <codecvt>
 #include <regex>
 
-#include <spdlog/spdlog.h>
-#include <nlohmann/json.hpp>
-
-#ifdef ST_PLATFORM_WINDOWS
+#ifdef ST_PLATFORM_MSDOS
 	#include <windows.h>
 #endif
 

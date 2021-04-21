@@ -1,20 +1,20 @@
 #ifndef CORE_H
 #define CORE_H
 
-	#ifdef ST_PLATFORM_MSDOS
-		#if ST_DYNAMIC_LINK
-			#ifdef ST_BUILD_DLL
-				#define SATOSHI_API _declspec(dllexport)
-			#else
-				#define SATOSHI_API _declspec(dllimport)
-			#endif
+#include <stpch.h>
+
+#ifdef ST_PLATFORM_MSDOS
+	#if ST_DYNAMIC_LINK
+		#ifdef ST_BUILD_DLL
+			#define SATOSHI_API _declspec(dllexport)
 		#else
-			#define SATOSHI_API
+			#define SATOSHI_API _declspec(dllimport)
 		#endif
 	#else
-		#error Satoshi unsupported on this platform
+		#define SATOSHI_API
 	#endif
-
+#else
+	#error Satoshi unsupported on this platform
 #endif
 
 #ifdef ST_DEBUG
@@ -31,4 +31,6 @@
 
 #define BIT(x) (1 << x)
 
-#define ST_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+#define ST_BIND_EVENT_FUNCTION(fn) std::bind(&fn, this, std::placeholders::_1)
+
+#endif

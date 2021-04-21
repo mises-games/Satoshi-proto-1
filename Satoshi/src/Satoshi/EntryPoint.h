@@ -1,15 +1,14 @@
 ﻿#ifndef ENTRYPOINT_H
 #define ENTRYPOINT_H
 
+#include <stpch.h>
+
 #include "Application.h"
 #include "Log.h"
 #include "./Utils/FileHandler.h"
 #include "./Utils/StringHandler.h"
 
 #include <iostream>
-#include <nlohmann/json.hpp>
-
-using json = nlohmann::json;
 
 #ifdef ST_PLATFORM_MSDOS
 
@@ -30,6 +29,4 @@ int main(int argc, char** argv)
 
 #endif
 
-
 #endif
-

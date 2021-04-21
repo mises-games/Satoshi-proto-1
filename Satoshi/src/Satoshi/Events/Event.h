@@ -1,12 +1,12 @@
 #ifndef EVENT_H
 #define EVENT_H
 
+#include <stpch.h>
 #include <Satoshi/Core.h>
 
 #include <Satoshi/Utils/StringHandler.h>
-#include <stpch.h>
 
-namespace Satoshi 
+namespace Satoshi
 {
 	enum class EventType 
 	{
@@ -48,10 +48,11 @@ namespace Satoshi
 
 #define EVENT_CLASS_CATEGORY(category) virtual unsigned GetCategoryFlags() const override { return category; }
 
-	class Event 
+	class SATOSHI_API Event 
 	{
+		friend class EventDispatcher;
 	public:
-		bool Handled = false;
+		bool m_Handled = false;
 
 		virtual EventType GetEventType() const = 0;
 		virtual const char* GetName() const = 0;
@@ -73,7 +74,6 @@ namespace Satoshi
 	private:
 		Event& m_Event;
 	};
-	
 }
 
 inline bool Satoshi::Event::IsInCategory(EventCategory category)
@@ -88,9 +88,9 @@ inline Satoshi::EventDispatcher::EventDispatcher(Event& event) : m_Event(event)
 template<typename T>
 inline bool Satoshi::EventDispatcher::Dispatch(EventFunction<T> function)
 {
-	bool dispatched = m_Event.GetEventType() = T::GetStaticType();
+	bool dispatched = (m_Event.GetEventType() == T::GetStaticType());
 	if (dispatched)
-		m_Event.Handled = func(*(T*)&m_Event);
+		m_Event.m_Handled = function(*(T*)&m_Event);
 	return dispatched;
 }
 #endif

@@ -9,7 +9,7 @@ namespace Satoshi
 	class WindowResizeEvent : public Event 
 	{
 	public:
-		WindowResizeEvent(unsigned, unsigned);
+		inline WindowResizeEvent(unsigned, unsigned);
 
 		inline unsigned GetWidth() const;
 		inline unsigned GetHeight() const;
@@ -25,7 +25,7 @@ namespace Satoshi
 	class WindowCloseEvent : public Event
 	{
 	public:
-		WindowCloseEvent() {}
+		inline WindowCloseEvent() {}
 
 		EVENT_CLASS_TYPE(WindowClose)
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
@@ -34,7 +34,7 @@ namespace Satoshi
 	class AppTickEvent : public Event
 	{
 	public:
-		AppTickEvent() {}
+		inline AppTickEvent() {}
 
 		EVENT_CLASS_TYPE(AppTick)
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
@@ -43,7 +43,7 @@ namespace Satoshi
 	class AppUpdateEvent : public Event
 	{
 	public:
-		AppUpdateEvent() {}
+		inline AppUpdateEvent() {}
 
 		EVENT_CLASS_TYPE(AppUpdate)
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
@@ -52,7 +52,7 @@ namespace Satoshi
 	class AppRenderEvent : public Event
 	{
 	public:
-		AppRenderEvent() {}
+		inline AppRenderEvent() {}
 
 		EVENT_CLASS_TYPE(AppRender)
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
@@ -82,11 +82,11 @@ inline unsigned Satoshi::WindowResizeEvent::GetHeight() const
 inline std::string Satoshi::WindowResizeEvent::ToString() const
 {
 	std::string buffer = Satoshi::StringHandler::Concatenate<std::string,char>
-	("WindowResizeEvent: ",	Satoshi::StringHandler::ParseNumber<std::string, char, unsigned>(m_Width));
+		("WindowResizeEvent: ",	Satoshi::StringHandler::ParseNumber<std::string, char, unsigned>(m_Width));
 	buffer = Satoshi::StringHandler::Concatenate<std::string,char>
-	(buffer,", ");
+		(buffer,", ");
 	buffer = Satoshi::StringHandler::Concatenate<std::string,char>
-	(buffer,Satoshi::StringHandler::ParseNumber<std::string, char, unsigned>(m_Height));
+		(buffer,Satoshi::StringHandler::ParseNumber<std::string, char, unsigned>(m_Height));
 	return buffer;
 }
 

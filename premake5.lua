@@ -13,7 +13,12 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "Satoshi/vendor/GLFW/include"
 
-include "Satoshi/vendor/GLFW"
+group "Dependencies"
+
+    include "Satoshi/vendor/GLFW"
+
+group ""
+
 
 project "Satoshi"
     location "Satoshi"
