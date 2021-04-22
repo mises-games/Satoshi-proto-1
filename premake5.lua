@@ -12,10 +12,12 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
 IncludeDir["GLFW"] = "Satoshi/vendor/GLFW/include"
+IncludeDir["GLAD"] = "Satoshi/vendor/GLAD/include"
 
 group "Dependencies"
 
     include "Satoshi/vendor/GLFW"
+    include "Satoshi/vendor/GLAD"
 
 group ""
 
@@ -43,12 +45,14 @@ project "Satoshi"
         "%{prj.name}/vendor/spdlog/include",
         "%{prj.name}/vendor/json/single_include",
         "%{IncludeDir.GLFW}",
+        "%{IncludeDir.GLAD}",
         "%{prj.name}/src"
     }
 
     links
     {
         "GLFW",
+        "GLAD",
         "opengl32.lib"
     }
 
@@ -60,7 +64,8 @@ project "Satoshi"
         defines
         {
             "ST_PLATFORM_MSDOS",
-            "ST_BUILD_DLL"
+            "ST_BUILD_DLL",
+            "GLFW_INCLUDE_NONE"
         }
 
         postbuildcommands

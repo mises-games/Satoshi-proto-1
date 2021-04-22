@@ -83,6 +83,9 @@ namespace Satoshi
 
 		m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(m_Window);
+		int status = gladLoadGL(glfwGetProcAddress);
+		ST_CORE_TRACE("GLAD initialization status: {0}", status);
+		glfwMakeContextCurrent(m_Window);
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
 

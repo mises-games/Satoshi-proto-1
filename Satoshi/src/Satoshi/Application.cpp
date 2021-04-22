@@ -2,6 +2,7 @@
 #include "Application.h"
 
 #include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
 #define BIND_EVENT_FUNCTION(x) std::bind(&Satoshi::Application::x, this, std::placeholders::_1)
 

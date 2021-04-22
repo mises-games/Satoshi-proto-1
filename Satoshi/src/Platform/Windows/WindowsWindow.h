@@ -2,7 +2,9 @@
 #define WINDOWS_WINDOW_H
 
 #include <Satoshi/Window.h>
+
 #include <GLFW/glfw3.h>
+#include <glad/gl.h>
 
 namespace Satoshi 
 {

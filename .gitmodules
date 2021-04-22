@@ -7,3 +7,6 @@
 [submodule "Satoshi/vendor/GLFW"]
 	path = Satoshi/vendor/GLFW
 	url = https://github.com/mises-games/glfw.git
+[submodule "Satoshi/vendor/GLAD"]
+	path = Satoshi/vendor/GLAD
+	url = https://github.com/mises-games/glad.git
