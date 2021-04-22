@@ -13,11 +13,13 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "Satoshi/vendor/GLFW/include"
 IncludeDir["GLAD"] = "Satoshi/vendor/GLAD/include"
+IncludeDir["ImGui"] = "Satoshi/vendor/ImGui"
 
 group "Dependencies"
 
     include "Satoshi/vendor/GLFW"
     include "Satoshi/vendor/GLAD"
+    include "Satoshi/vendor/ImGui"
 
 group ""
 
@@ -45,6 +47,7 @@ project "Satoshi"
         "%{prj.name}/vendor/spdlog/include",
         "%{prj.name}/vendor/json/single_include",
         "%{IncludeDir.GLFW}",
+        "%{IncludeDir.ImGui}",
         "%{IncludeDir.GLAD}",
         "%{prj.name}/src"
     }
@@ -53,6 +56,7 @@ project "Satoshi"
     {
         "GLFW",
         "GLAD",
+        "ImGui",
         "opengl32.lib"
     }
 
@@ -66,11 +70,6 @@ project "Satoshi"
             "ST_PLATFORM_MSDOS",
             "ST_BUILD_DLL",
             "GLFW_INCLUDE_NONE"
-        }
-
-        postbuildcommands
-        {
-            ("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
         }
     
     filter "configurations:Debug"
@@ -89,6 +88,8 @@ project "Sandbox"
     location "Sandbox"
     kind "ConsoleApp"
     language "C++"
+    cppdialect "C++17"
+    staticruntime "on"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -104,7 +105,8 @@ project "Sandbox"
     {
         "Satoshi/vendor/spdlog/include",
         "Satoshi/vendor/json/single_include",
-        "Satoshi/src"
+        "Satoshi/src",
+        "Satoshi/vendor"
     }
 
     links

@@ -8,6 +8,7 @@
 #include "Satoshi/Utils/FileHandler.h"
 #include "Satoshi/Utils/StringHandler.h"
 #include "Satoshi/Utils/AssertionHandler.h"
+#include "Satoshi/ImGui/ImGuiLayer.h"
 
 #endif
 
