@@ -21,6 +21,7 @@ void Satoshi::LayerStack::PushLayer(Layer* layer)
 void Satoshi::LayerStack::PushOverlay(Layer* overlay)
 {
 	m_Layers.emplace_back(overlay);
+	m_LayerInsertIndex++;
 }
 
 void Satoshi::LayerStack::PopLayer(Layer* layer)

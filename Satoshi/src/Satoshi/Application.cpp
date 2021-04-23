@@ -28,7 +28,7 @@ void Satoshi::Application::Run()
 		glClearColor(0,0.5,0.25,1);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		for (auto layer : m_LayerStack)
+		for (Layer* layer : m_LayerStack)
 			layer->OnUpdate();
 
 		m_Window->OnUpdate();
@@ -52,11 +52,13 @@ void Satoshi::Application::OnEvent(Event& e)
 void Satoshi::Application::PushLayer(Layer* layer)
 {
 	m_LayerStack.PushLayer(layer);
+	layer->OnAttach();
 }
 
 void Satoshi::Application::PushOverlay(Layer* layer)
 {
 	m_LayerStack.PushOverlay(layer);
+	layer->OnAttach();
 }
 
 Satoshi::Window& Satoshi::Application::GetWindow()
