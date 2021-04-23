@@ -9,11 +9,11 @@ namespace Satoshi
 	class KeyEvent : public Event 
 	{
 	public:
-		inline int GetKeyCode() const;
+		inline int GetKeyCode() const { return m_KeyCode; }
 
 		EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryKeyboard)
 	protected:
-		KeyEvent(int);
+		KeyEvent(int keycode) :	m_KeyCode(keycode) {}
 
 		int m_KeyCode;
 	};
@@ -21,11 +21,22 @@ namespace Satoshi
 	class KeyPressedEvent : public KeyEvent
 	{
 	public:
-		KeyPressedEvent(int, int);
+		KeyPressedEvent(int keycode, int repeatCount) :	KeyEvent(keycode), m_RepeatCount(repeatCount) {}
 
-		inline int GetRepeatCount() const;
+		inline int GetRepeatCount() const { return m_RepeatCount; }
 	
-		std::string ToString() const override;
+		std::string ToString() const override 
+		{
+			std::string buffer = Satoshi::StringHandler::Concatenate<std::string, char>
+				("KeyPressedEvent: ", Satoshi::StringHandler::ParseNumber<std::string, char, int>(m_KeyCode));
+			buffer = Satoshi::StringHandler::Concatenate<std::string, char>
+				(buffer, " (");
+			buffer = Satoshi::StringHandler::Concatenate<std::string, char>
+				(buffer, Satoshi::StringHandler::ParseNumber<std::string, char, int>(m_RepeatCount));
+			buffer = Satoshi::StringHandler::Concatenate<std::string, char>
+				(buffer, " repeats)");
+			return buffer;
+		}
 	
 		EVENT_CLASS_TYPE(KeyPressed)
 	private:
@@ -35,9 +46,14 @@ namespace Satoshi
 	class KeyTypedEvent : public KeyEvent
 	{
 	public:
-		KeyTypedEvent(int);
+		KeyTypedEvent(int keycode) : KeyEvent(keycode) {}
 
-		std::string ToString() const override;
+		std::string ToString() const override 
+		{
+			std::string buffer = Satoshi::StringHandler::Concatenate<std::string, char>
+				("KeyTypedEvent: ", Satoshi::StringHandler::ParseNumber<std::string, char, int>(m_KeyCode));
+			return buffer;
+		}
 
 		EVENT_CLASS_TYPE(KeyTyped)
 	};
@@ -45,93 +61,18 @@ namespace Satoshi
 	class KeyReleasedEvent : public KeyEvent
 	{
 	public:
-		KeyReleasedEvent(int);
+		KeyReleasedEvent(int keycode) :	KeyEvent(keycode) {}
 
-		std::string ToString() const override;
+		std::string ToString() const override 
+		{
+			std::string buffer = Satoshi::StringHandler::Concatenate<std::string, char>
+				("KeyReleasedEvent: ", Satoshi::StringHandler::ParseNumber<std::string, char, int>(m_KeyCode));
+			return buffer;
+		}
 
 		EVENT_CLASS_TYPE(KeyReleased)
 	};
 
-}
-
-// Key Event Implementation
-
-inline int Satoshi::KeyEvent::GetKeyCode() const
-{
-	return m_KeyCode;
-}
-
-Satoshi::KeyEvent::KeyEvent(int keycode) :
-	m_KeyCode(keycode)
-{
-
-}
-
-// Key Pressed Event Implementation
-
-Satoshi::KeyPressedEvent::KeyPressedEvent(int keycode, int repeatCount) :
-	KeyEvent(keycode), m_RepeatCount(repeatCount)
-{
-}
-
-inline int Satoshi::KeyPressedEvent::GetRepeatCount() const
-{
-	return m_RepeatCount;
-}
-
-inline std::string Satoshi::KeyPressedEvent::ToString() const
-{
-	/*
-	return Satoshi::StringHandler::Concatenate<std::string>
-	(
-		5,
-		"KeyPressedEvent: ", 
-		Satoshi::StringHandler::ParseNumber<std::string, int>(m_KeyCode), 
-		" (", 
-		Satoshi::StringHandler::ParseNumber<std::string, int>(m_RepeatCount),
-		" repeats)"
-	);
-	*/
-
-	std::string buffer = Satoshi::StringHandler::Concatenate<std::string, char>
-		("KeyPressedEvent: ", Satoshi::StringHandler::ParseNumber<std::string, char, int>(m_KeyCode));
-	buffer = Satoshi::StringHandler::Concatenate<std::string, char>
-		(buffer, " (");
-	buffer = Satoshi::StringHandler::Concatenate<std::string, char>
-		(buffer, Satoshi::StringHandler::ParseNumber<std::string, char, int>(m_RepeatCount));
-	buffer = Satoshi::StringHandler::Concatenate<std::string, char>
-		(buffer, " repeats)");
-	return buffer;
-}
-
-// Key Typed Event Implementation
-
-Satoshi::KeyTypedEvent::KeyTypedEvent(int keycode) :
-	KeyEvent(keycode)
-{
-
-}
-
-inline std::string Satoshi::KeyTypedEvent::ToString() const
-{
-	std::string buffer = Satoshi::StringHandler::Concatenate<std::string, char>
-		("KeyTypedEvent: ", Satoshi::StringHandler::ParseNumber<std::string, char, int>(m_KeyCode));
-	return buffer;
-}
-
-// Key Released Event Implementation
-
-Satoshi::KeyReleasedEvent::KeyReleasedEvent(int keycode) :
-	KeyEvent(keycode)
-{
-
-}
-
-inline std::string Satoshi::KeyReleasedEvent::ToString() const
-{
-	std::string buffer = Satoshi::StringHandler::Concatenate<std::string, char>
-		("KeyReleasedEvent: ", Satoshi::StringHandler::ParseNumber<std::string, char, int>(m_KeyCode));
-	return buffer;
 }
 
 #endif

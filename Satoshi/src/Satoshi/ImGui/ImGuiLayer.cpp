@@ -3,7 +3,9 @@
 
 #include <imgui.h>
 #include <Platform/OpenGL/ImGuiOpenGLRenderer.h>
+
 #include <GLFW/glfw3.h>
+#include <glad/gl.h>
 
 #include <Satoshi/Application.h>
 
@@ -78,4 +80,86 @@ void Satoshi::ImGuiLayer::OnUpdate()
 
 void Satoshi::ImGuiLayer::OnEvent(Event& event)
 {
+	EventDispatcher dispatcher(event);
+	dispatcher.Dispatch<MouseButtonPressedEvent>(ST_BIND_EVENT_FUNCTION(ImGuiLayer::OnMouseButtonPressedEvent));
+	dispatcher.Dispatch<MouseButtonReleasedEvent>(ST_BIND_EVENT_FUNCTION(ImGuiLayer::OnMouseButtonReleasedEvent));
+	dispatcher.Dispatch<MouseMovedEvent>(ST_BIND_EVENT_FUNCTION(ImGuiLayer::OnMouseMovedEvent));
+	dispatcher.Dispatch<MouseScrolledEvent>(ST_BIND_EVENT_FUNCTION(ImGuiLayer::OnMouseScrolledEvent));
+	dispatcher.Dispatch<KeyPressedEvent>(ST_BIND_EVENT_FUNCTION(ImGuiLayer::OnKeyPressedEvent));
+	dispatcher.Dispatch<KeyTypedEvent>(ST_BIND_EVENT_FUNCTION(ImGuiLayer::OnKeyTypedEvent));
+	dispatcher.Dispatch<KeyReleasedEvent>(ST_BIND_EVENT_FUNCTION(ImGuiLayer::OnKeyReleasedEvent));
+	dispatcher.Dispatch<WindowResizeEvent>(ST_BIND_EVENT_FUNCTION(ImGuiLayer::OnWindowResizeEvent));
+}
+
+bool Satoshi::ImGuiLayer::OnMouseButtonPressedEvent(MouseButtonPressedEvent& e)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	io.MouseDown[e.GetMouseButton()] = true;
+
+	return false;
+}
+
+bool Satoshi::ImGuiLayer::OnMouseButtonReleasedEvent(MouseButtonReleasedEvent& e)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	io.MouseDown[e.GetMouseButton()] = false;
+
+	return false;
+}
+
+bool Satoshi::ImGuiLayer::OnMouseMovedEvent(MouseMovedEvent& e)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	io.MousePos = ImVec2(e.GetX(), e.GetY());
+
+	return false;
+}
+
+bool Satoshi::ImGuiLayer::OnMouseScrolledEvent(MouseScrolledEvent& e)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	io.MouseWheelH += e.GetXOffset();
+	io.MouseWheel += e.GetYOffset();
+
+	return false;
+}
+
+bool Satoshi::ImGuiLayer::OnKeyPressedEvent(KeyPressedEvent& e)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	io.KeysDown[e.GetKeyCode()] = true;
+
+	io.KeyCtrl = io.KeysDown[GLFW_KEY_LEFT_CONTROL] || io.KeysDown[GLFW_KEY_RIGHT_CONTROL];
+	io.KeyShift = io.KeysDown[GLFW_KEY_LEFT_SHIFT] || io.KeysDown[GLFW_KEY_RIGHT_SHIFT];
+	io.KeyAlt = io.KeysDown[GLFW_KEY_LEFT_ALT] || io.KeysDown[GLFW_KEY_RIGHT_ALT];
+	io.KeySuper = io.KeysDown[GLFW_KEY_LEFT_SUPER] || io.KeysDown[GLFW_KEY_RIGHT_SUPER];
+	return false;
+}
+
+bool Satoshi::ImGuiLayer::OnKeyReleasedEvent(KeyReleasedEvent& e)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	io.KeysDown[e.GetKeyCode()] = false;
+
+	return false;
+}
+
+bool Satoshi::ImGuiLayer::OnKeyTypedEvent(KeyTypedEvent& e)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	int keycode = e.GetKeyCode();
+	if (keycode > 0 && keycode < 0x10000)
+		io.AddInputCharacter((unsigned short)keycode);
+
+	return false;
+}
+
+bool Satoshi::ImGuiLayer::OnWindowResizeEvent(WindowResizeEvent& e)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	io.DisplaySize = ImVec2(e.GetWidth(), e.GetHeight());
+	io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
+	glViewport(0, 0, e.GetWidth(), e.GetHeight());
+
+	return false;
 }
