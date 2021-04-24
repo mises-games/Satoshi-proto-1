@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <Satoshi/Input.h>
 #include <Satoshi/KeyCodes.h>
+#include <Samples/Samples.h>
 
 #define BIND_EVENT_FUNCTION(x) std::bind(&Satoshi::Application::x, this, std::placeholders::_1)
 
@@ -27,15 +28,8 @@ void Satoshi::Application::Run()
 {
 	while (m_Running) 
 	{
-		if (Input::IsKeyPressed(ST_KEY_Q))
-			ST_CORE_INFO("Key Q Pressed");
-		float horizontal = Input::GetAxisRawHorizontal();
-		if (horizontal != 0.0f)
-			ST_CORE_INFO("Horizontal move {0}", horizontal);
-		float vertical = Input::GetAxisRawVertical();
-		if (vertical != 0.0f)
-			ST_CORE_INFO("Vertical move {0}", vertical);
-		glClearColor(0,0.5,0.25,1);
+		Sample1();
+		glClearColor(0, 0.5, 0.25, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		for (Layer* layer : m_LayerStack)

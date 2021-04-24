@@ -13,3 +13,9 @@
 [submodule "Satoshi/vendor/ImGui"]
 	path = Satoshi/vendor/ImGui
 	url = https://github.com/mises-games/ImGui.git
+[submodule "Satoshi/vendor/DirectXMath"]
+	path = Satoshi/vendor/DirectXMath
+	url = https://github.com/microsoft/DirectXMath.git
+[submodule "Satoshi/vendor/glm"]
+	path = Satoshi/vendor/glm
+	url = https://github.com/g-truc/glm.git
