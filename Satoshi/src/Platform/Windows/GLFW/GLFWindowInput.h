@@ -6,7 +6,7 @@
 namespace Satoshi 
 {
 
-	class WindowsInput : public Input 
+	class GLFWindowInput : public Input 
 	{
 	protected:
 		virtual bool IsKeyPressedImpl(int keycode) override;

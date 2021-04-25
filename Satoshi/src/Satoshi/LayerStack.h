@@ -8,7 +8,7 @@
 
 namespace Satoshi 
 {
-	class SATOSHI_API LayerStack 
+	class LayerStack 
 	{
 	public:
 		LayerStack();

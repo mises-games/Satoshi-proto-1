@@ -7,6 +7,8 @@
 #include <Satoshi/Events/MouseEvent.h>
 #include <Satoshi/Events/ApplicationEvent.h>
 
+#include <Platform/Renderer/OpenGL/OpenGLContext.h>
+
 #include <glad/gl.h>
 
 namespace Satoshi
@@ -20,60 +22,66 @@ namespace Satoshi
 
 	Window* Window::Create(const WindowProps& props)
 	{
-		return new WindowsWindow(props);
+		return new GLFWindow(props);
 	}
 
-	WindowsWindow::WindowsWindow(const WindowProps& props)
+	GLFWindow::GLFWindow(const WindowProps& props)
 	{
 		Init(props);
 	}
 
-	WindowsWindow::~WindowsWindow()
+	GLFWindow::~GLFWindow()
 	{
 		Shutdown();
 	}
 
-	void WindowsWindow::OnUpdate()
+	void GLFWindow::OnUpdate()
 	{
 		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
+		m_Context->SwapBuffers();
 	}
 
-	unsigned WindowsWindow::GetWidth() const
+	unsigned GLFWindow::GetWidth() const
 	{
 		return m_Data.Width;
 	}
 
-	unsigned WindowsWindow::GetHeight() const
+	unsigned GLFWindow::GetHeight() const
 	{
 		return m_Data.Height;
 	}
 
-	void WindowsWindow::SetEventCallback(const EventCallbackFunction& callback)
+	void GLFWindow::SetEventCallback(const EventCallbackFunction& callback)
 	{
 		m_Data.EventCallback = callback;
 	}
 
-	void WindowsWindow::SetVSync(bool enabled)
+	void GLFWindow::SetVSync(bool enabled)
 	{
+		if (enabled)
+			glfwSwapInterval(1);
+		else
+			glfwSwapInterval(0);
+
+		m_Data.VSync = enabled;
 	}
 
-	bool WindowsWindow::IsVSync() const
+	bool GLFWindow::IsVSync() const
 	{
-		return false;
+		return m_Data.VSync;
 	}
 
-	void* WindowsWindow::GetNativeWindow() const
+	void* GLFWindow::GetNativeWindow() const
 	{
 		return m_Window;
 	}
 
-	void* WindowsWindow::GetImGuiLayer() const
+	void* GLFWindow::GetImGuiLayer() const
 	{
 		return m_ImGuiLayer;
 	}
 
-	void WindowsWindow::Init(const WindowProps& props)
+	void GLFWindow::Init(const WindowProps& props)
 	{
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
@@ -81,32 +89,33 @@ namespace Satoshi
 
 		m_ImGuiLayer = new OpenGLImGuiLayer();
 
-		ST_CORE_TRACE("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
+		ST_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
 		if (!s_GLFWInitialized)
 		{
 			int success = glfwInit();
-			ST_CORE_TRACE("GLFW initialization status: {0}", success);
+			ST_CORE_ASSERT(success,"Couldn't initialize GLFW");
+			glfwSetErrorCallback(GLFWErrorCallback);
 			s_GLFWInitialized = true;
 		}
 
 		m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(m_Window);
-		int status = gladLoadGL(glfwGetProcAddress);
-		ST_CORE_TRACE("GLAD initialization status: {0}", status);
-		glfwMakeContextCurrent(m_Window);
+		
+		m_Context = new OpenGLContext(m_Window);
+		m_Context->Init();
+
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
 
 		SetGLCallbacks();
 	}
 
-	void WindowsWindow::Shutdown()
+	void GLFWindow::Shutdown()
 	{
 		glfwDestroyWindow(m_Window);
 	}
 
-	void WindowsWindow::SetGLCallbacks()
+	void GLFWindow::SetGLCallbacks()
 	{
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 		{

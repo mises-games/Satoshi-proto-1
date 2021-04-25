@@ -4,15 +4,17 @@
 #include <Satoshi/Window.h>
 
 #include <GLFW/glfw3.h>
+
 #include <Platform/Renderer/OpenGL/OpenGLImGuiLayer.h>
+#include <Satoshi/Renderer/GraphicsContext.h>
 
 namespace Satoshi 
 {
-	class SATOSHI_API WindowsWindow : public Window 
+	class GLFWindow : public Window 
 	{
 	public:
-		WindowsWindow(const WindowProps& props);
-		virtual ~WindowsWindow();
+		GLFWindow(const WindowProps& props);
+		virtual ~GLFWindow();
 
 		void OnUpdate() override;
 
@@ -32,6 +34,7 @@ namespace Satoshi
 		virtual void Shutdown();
 
 		GLFWwindow* m_Window;
+		GraphicsContext* m_Context;
 		ImGuiLayer* m_ImGuiLayer;
 
 		struct WindowData

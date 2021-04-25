@@ -48,7 +48,7 @@ namespace Satoshi
 
 #define EVENT_CLASS_CATEGORY(category) virtual unsigned GetCategoryFlags() const override { return category; }
 
-	class SATOSHI_API Event 
+	class Event 
 	{
 		friend class EventDispatcher;
 	public:

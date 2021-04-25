@@ -8,7 +8,7 @@
 
 namespace Satoshi 
 {
-	class SATOSHI_API Log
+	class Log
 	{
 	public:
 		static void Init();

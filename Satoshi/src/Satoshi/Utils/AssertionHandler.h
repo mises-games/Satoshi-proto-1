@@ -5,7 +5,7 @@
 
 namespace Satoshi 
 {
-	class SATOSHI_API AssertionHandler 
+	class AssertionHandler 
 	{
 	public:
 		template <typename T, typename S>

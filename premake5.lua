@@ -72,14 +72,15 @@ project "Satoshi"
 
     filter "system:windows"
         cppdialect "C++17"
-        staticruntime "On"
+        staticruntime "on"
         systemversion "latest"
 
         defines
         {
             "ST_PLATFORM_MSDOS",
             "ST_BUILD_DLL",
-            "GLFW_INCLUDE_NONE"
+            "GLFW_INCLUDE_NONE",
+            "_CRT_SECURE_NO_WARNINGS"
         }
 
         links
@@ -94,15 +95,15 @@ project "Satoshi"
     
     filter "configurations:Debug"
         defines "ST_DEBUG"
-        symbols "On"
+        symbols "on"
     
     filter "configurations:Release"
         defines "ST_RELEASE"
-        optimize "On"    
+        optimize "on"    
     
     filter "configurations:Dist"
         defines "ST_DIST"
-        optimize "On"
+        optimize "on"
 
 project "Sandbox"
     location "Sandbox"
@@ -146,12 +147,12 @@ project "Sandbox"
     
     filter "configurations:Debug"
         defines "ST_DEBUG"
-        symbols "On"
+        symbols "on"
     
     filter "configurations:Release"
         defines "ST_RELEASE"
-        optimize "On"    
+        optimize "on"    
     
     filter "configurations:Dist"
         defines "ST_DIST"
-        optimize "On"
+        optimize "on"

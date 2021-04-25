@@ -20,6 +20,8 @@
 #include <codecvt>
 #include <regex>
 
+#include "Satoshi/Log.h"
+
 #ifdef ST_PLATFORM_MSDOS
 	#include <windows.h>
 #endif

@@ -25,7 +25,7 @@ namespace Satoshi
 		}
 	};
 
-	class SATOSHI_API Window 
+	class Window 
 	{
 	public:
 		using EventCallbackFunction = std::function<void(Event&)>;

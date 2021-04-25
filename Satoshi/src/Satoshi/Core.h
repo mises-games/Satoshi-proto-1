@@ -3,20 +3,6 @@
 
 #include <stpch.h>
 
-#ifdef ST_PLATFORM_MSDOS
-	#if ST_DYNAMIC_LINK
-		#ifdef ST_BUILD_DLL
-			#define SATOSHI_API _declspec(dllexport)
-		#else
-			#define SATOSHI_API _declspec(dllimport)
-		#endif
-	#else
-		#define SATOSHI_API
-	#endif
-#else
-	#error Satoshi unsupported on this platform
-#endif
-
 #ifdef ST_DEBUG
 	#define ST_ENABLE_ASSERTS
 #endif
