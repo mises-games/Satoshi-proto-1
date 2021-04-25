@@ -5,6 +5,7 @@
 #include <Platform/Windows/GLFW/ImGuiGLFWindow.h>
 
 #include <Satoshi/Application.h>
+#include <Samples/Samples.h>
 
 Satoshi::OpenGLImGuiLayer::OpenGLImGuiLayer() :
 	ImGuiLayer()
@@ -28,9 +29,16 @@ void Satoshi::OpenGLImGuiLayer::OnAttach()
 	ImGuiStyle& style = ImGui::GetStyle();
 
 	style.Colors[ImGuiCol_WindowBg] = ImVec4(0.6f,0.3f,0.2f,1.0f);
+	style.Colors[ImGuiCol_TitleBg] = ImVec4(0.125f,0.75f,0.6f,1.0f);
+	style.Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.98f, 0.98f, 0.98f, 0.53f);
+	style.Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(1.00f, 1.00f, 1.00f, 0.51f);
+	style.Colors[ImGuiCol_TitleBgActive] = ImVec4(0.82f, 0.82f, 0.82f, 1.00f);
 	
 	Application& app = Application::Get();
 	GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
+
+	io.Fonts->AddFontFromFileTTF("fonts/Roboto-Regular.ttf", 14);
+	io.Fonts->AddFontFromFileTTF("fonts/OrelegaOne-Regular.ttf", 14);
 
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 410");
@@ -63,5 +71,5 @@ void Satoshi::OpenGLImGuiLayer::End()
 void Satoshi::OpenGLImGuiLayer::OnImGuiRender()
 {
 	bool show = true;
-	ImGui::ShowDemoWindow(&show);
+	Satoshi::ImGuiCustomSample(NULL);
 }
