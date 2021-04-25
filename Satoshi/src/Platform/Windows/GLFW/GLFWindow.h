@@ -4,7 +4,7 @@
 #include <Satoshi/Window.h>
 
 #include <GLFW/glfw3.h>
-#include <glad/gl.h>
+#include <Platform/Renderer/OpenGL/OpenGLImGuiLayer.h>
 
 namespace Satoshi 
 {
@@ -24,6 +24,7 @@ namespace Satoshi
 		bool IsVSync() const override;
 
 		virtual void* GetNativeWindow() const;
+		virtual void* GetImGuiLayer() const;
 
 	private:
 
@@ -31,6 +32,7 @@ namespace Satoshi
 		virtual void Shutdown();
 
 		GLFWwindow* m_Window;
+		ImGuiLayer* m_ImGuiLayer;
 
 		struct WindowData
 		{

@@ -1,5 +1,5 @@
 #include "stpch.h"
-#include "WindowsInput.h"
+#include "GLFWindowInput.h"
 
 #include "Satoshi/Application.h"
 #include <GLFW/glfw3.h>

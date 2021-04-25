@@ -1,5 +1,5 @@
 #include "stpch.h"
-#include "WindowsWindow.h"
+#include "GLFWindow.h"
 
 #include <Satoshi/Log.h>
 
@@ -7,7 +7,9 @@
 #include <Satoshi/Events/MouseEvent.h>
 #include <Satoshi/Events/ApplicationEvent.h>
 
-namespace Satoshi 
+#include <glad/gl.h>
+
+namespace Satoshi
 {
 	static bool s_GLFWInitialized = false;
 
@@ -66,11 +68,18 @@ namespace Satoshi
 		return m_Window;
 	}
 
+	void* WindowsWindow::GetImGuiLayer() const
+	{
+		return m_ImGuiLayer;
+	}
+
 	void WindowsWindow::Init(const WindowProps& props)
 	{
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
 		m_Data.Title = props.Title;
+
+		m_ImGuiLayer = new OpenGLImGuiLayer();
 
 		ST_CORE_TRACE("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 

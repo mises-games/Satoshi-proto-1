@@ -9,6 +9,7 @@
 
 #include <Satoshi/Window.h>
 #include <Satoshi/LayerStack.h>
+#include <Satoshi/ImGui/ImGuiLayer.h>
 
 namespace Satoshi 
 {
@@ -33,6 +34,7 @@ namespace Satoshi
 		bool OnWindowClose(WindowCloseEvent& e);
 
 		std::unique_ptr<Window> m_Window;
+		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running;
 		LayerStack m_LayerStack;
 

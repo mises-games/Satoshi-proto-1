@@ -3,10 +3,7 @@
 class Sandbox : public Satoshi::Application 
 {
 public:
-	Sandbox() 
-	{
-		PushOverlay(new Satoshi::ImGuiLayer());
-	}
+	Sandbox() {}
 	~Sandbox() {}
 };
 
