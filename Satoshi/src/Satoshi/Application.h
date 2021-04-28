@@ -10,6 +10,10 @@
 #include <Satoshi/Window.h>
 #include <Satoshi/LayerStack.h>
 #include <Satoshi/ImGui/ImGuiLayer.h>
+#include <Satoshi/Renderer/Buffer.h>
+#include <Satoshi/Renderer/Shader.h>
+#include <Satoshi/Renderer/VertexArray.h>
+#include <Satoshi/Renderer/Drawer.h>
 
 namespace Satoshi 
 {
@@ -33,13 +37,21 @@ namespace Satoshi
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 
+		std::unique_ptr<Drawer> m_Drawer;
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running;
 		LayerStack m_LayerStack;
 
+		
+		std::shared_ptr<Shader> m_Shader;
+		std::shared_ptr<VertexArray> m_VertexArray;
+		
+		std::shared_ptr<Shader> m_BlueShader;
+		std::shared_ptr<VertexArray> m_SquareVertexArray;
+
 		static Application* s_Instance;
-		unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
+		
 	};
 
 	Application* CreateApplication();

@@ -40,10 +40,14 @@ namespace Satoshi
 		virtual void SetEventCallback(const EventCallbackFunction&) = 0;
 		virtual void SetVSync(bool enabled) = 0;
 		virtual bool IsVSync() const = 0;
+		virtual void SetBackgroundColor(float r, float g, float b, float a = 1.0f) = 0;
+		virtual void SetClearParams(uint32_t Param) = 0;
+		virtual void ApplyBackgroundColor() = 0;
+		virtual void ApplyClearParams() = 0;
 
 		virtual void* GetNativeWindow() const = 0;
 		virtual void* GetImGuiLayer() const = 0;
-
+		
 		static Window* Create(const WindowProps& props = WindowProps());
 	};
 }

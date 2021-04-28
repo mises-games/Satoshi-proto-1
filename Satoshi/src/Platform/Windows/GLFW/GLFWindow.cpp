@@ -20,11 +20,6 @@ namespace Satoshi
 		ST_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 	}
 
-	Window* Window::Create(const WindowProps& props)
-	{
-		return new GLFWindow(props);
-	}
-
 	GLFWindow::GLFWindow(const WindowProps& props)
 	{
 		Init(props);
@@ -69,6 +64,31 @@ namespace Satoshi
 	bool GLFWindow::IsVSync() const
 	{
 		return m_Data.VSync;
+	}
+
+	void GLFWindow::SetBackgroundColor(float r, float g, float b, float a)
+	{
+		m_BackgroundColor = glm::vec4(r, g, b, a);
+	}
+
+	void GLFWindow::ApplyBackgroundColor()
+	{
+		glClearColor(
+			m_BackgroundColor.r,
+			m_BackgroundColor.g,
+			m_BackgroundColor.b,
+			m_BackgroundColor.a
+		);
+	}
+
+	void GLFWindow::ApplyClearParams()
+	{
+		glClear(m_ClearParams);
+	}
+
+	void GLFWindow::SetClearParams(uint32_t param)
+	{
+		m_ClearParams |= param;
 	}
 
 	void* GLFWindow::GetNativeWindow() const

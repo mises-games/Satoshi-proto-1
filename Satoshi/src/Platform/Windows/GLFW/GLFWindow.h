@@ -8,6 +8,9 @@
 #include <Platform/Renderer/OpenGL/OpenGLImGuiLayer.h>
 #include <Satoshi/Renderer/GraphicsContext.h>
 
+#include <glm/glm.hpp>
+#include <glad/gl.h>
+
 namespace Satoshi 
 {
 	class GLFWindow : public Window 
@@ -24,15 +27,21 @@ namespace Satoshi
 		void SetEventCallback(const EventCallbackFunction& callback) override;
 		void SetVSync(bool enabled) override;
 		bool IsVSync() const override;
+		virtual void SetBackgroundColor(float r, float g, float b, float a = 1.0f) override;
+		virtual void SetClearParams(uint32_t Param) override;
+		virtual void ApplyBackgroundColor() override;
+		virtual void ApplyClearParams() override;
 
-		virtual void* GetNativeWindow() const;
-		virtual void* GetImGuiLayer() const;
+		virtual void* GetNativeWindow() const override;
+		virtual void* GetImGuiLayer() const override;
 
 	private:
 
 		virtual void Init(const WindowProps& props);
 		virtual void Shutdown();
 
+		GLenum m_ClearParams = 0;
+		glm::vec4 m_BackgroundColor;
 		GLFWwindow* m_Window;
 		GraphicsContext* m_Context;
 		ImGuiLayer* m_ImGuiLayer;
